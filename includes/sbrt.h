@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/08 11:59:23 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/09 15:47:28 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,9 @@ typedef struct s_color
 
 typedef struct s_ray
 {
-	t_vector3	origin;
-	t_vector3	dir;
+	t_vector3	p1;
+	t_vector3	p2;
+	t_vector3	lab;
 }				t_ray;
 
 typedef struct s_inter
@@ -137,25 +138,25 @@ typedef struct s_alight
 
 typedef struct s_camera
 {
-	double		focal_length;
-	double		viewport_width;
-	double		viewport_height;
+	double		horz_size;
+	double		aspect;
+	double		length;
 	t_vector3	lookfrom;
 	t_vector3	lookat;
 	t_vector3	vup;
-	t_vector3	ori;
-	double		vfov;
-	t_vector3	pixel00_loc;
-	t_vector3	pixel_delta_u;
-	t_vector3	pixel_delta_v;
+	t_vector3	alignment;
+	t_vector3	proj_screen_u;
+	t_vector3	proj_screen_v;
+	t_vector3	proj_screen_center;
 }				t_camera;
 
 typedef struct s_light
 {
-	t_vector3	coord;
-	double		ratio;
-	t_color		color;
-}				t_light;
+	t_vector3		coord;
+	double			ratio;
+	t_color			color;
+	struct s_light	*next;
+}					t_light;
 
 typedef struct s_sphere
 {
@@ -200,8 +201,7 @@ typedef struct s_objects
 	int					id;
 	int					type;
 	void				*object;
-	int					(*ft_hit)(const void *, const t_ray,
-			const t_inter, t_hit_rec *);
+	int					(*ft_hit)(const void *, const t_ray, t_hit_rec *);
 	struct s_objects	*next;
 }					t_objects;
 
@@ -229,8 +229,10 @@ typedef struct s_base
 	t_alloc			*alloc;
 	void			*mlx_ptr;
 	void			*win_ptr;
+	t_camera		*camera;
 	int				exit_code;
 	unsigned long	seed;
+	t_objects		*first_object;
 }					t_base;
 
 /* Alternative structures */
@@ -284,7 +286,8 @@ int			close_window(t_base *base);
 
 /* Init */
 int			ft_base_init(t_base *base);
-void		ft_camera_init(t_base *base);
+t_camera	*ft_cam_new(void);
+void		ft_update_cam(t_camera *cam);
 
 /* Errors */
 void		*print_error_null(char *error, char *var);
@@ -337,17 +340,19 @@ double		ft_rand_double(t_base *base);
 double		ft_deg_to_rad(double deg);
 double		ft_rad_to_deg(double rad);
 void		ft_swap(double *a, double *b);
+int			ft_close_enough(const double f1, const double f2);
 
 /* Hittable Utils */
 void		ft_set_hit_func(t_objects *new_object, int type);
-int			ft_hit_anything(t_objects *list, const t_ray r,
-				const t_inter ray_t, t_hit_rec *rec);
-int			ft_hit_sphere(const void *sphere_obj, const t_ray r,
-				const t_inter ray_t, t_hit_rec *rec);
+int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec);
+int			ft_sphere_hit(const void *sphere_obj, const t_ray r, t_hit_rec *rec);
 int			ft_hit_plane(const void *plane_obj, const t_ray r,
 				const t_inter ray_t, t_hit_rec *rec);
 int			ft_hit_cylinder(const void *cylinder_obj, const t_ray r,
 				const t_inter ray_t, t_hit_rec *rec);
+t_objects	*ft_object_new(void *object, int type);
+t_objects	*ft_object_last(t_objects *hittable);
+void		ft_object_add(t_objects **hittable, t_objects *new);
 
 /* Vector3 Utils */
 t_vector3	ft_vec3_new(const double x, const double y, const double z);
@@ -375,7 +380,8 @@ int			ft_vec3_grtr(const t_vector3 v1, const t_vector3 v2);
 int			ft_vec3_lssr(const t_vector3 v1, const t_vector3 v2);
 
 /* Ray Utils */
-t_ray		ft_ray_new(const t_vector3 origin, const t_vector3 dir);
+t_ray		ft_ray_new(const t_vector3 p1, const t_vector3 p2);
+int			ft_generate_ray(t_camera cam, float proj_screen_x, float proj_screen_y, t_ray *camera_ray);
 t_vector3	ft_ray_at(const t_ray ray, const double t);
 t_ray		ft_ray_calculate(t_base *base, int i, int j);
 t_color		ft_ray_color(t_base *base, t_ray r, int depth, t_objects *world);

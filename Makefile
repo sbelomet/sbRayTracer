@@ -6,7 +6,7 @@
 #    By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/14 10:06:00 by lgosselk          #+#    #+#              #
-#    Updated: 2024/05/08 15:53:32 by sbelomet         ###   ########.fr        #
+#    Updated: 2024/05/09 15:16:52 by sbelomet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,29 +35,31 @@ HOOKS_DIR		=	hooks/
 ERRORS_DIR		=	errors/
 #PARSING_DIR		=	parsing/
 RAY_UTILS_DIR	=	ray_utils/
-#MATH_UTILS_DIR	=	math_utils/
+MATH_UTILS_DIR	=	math_utils/
 #AABB_UTILS_DIR	=	aabb_utils/
 COLOR_UTILS_DIR	=	color_utils/
 VEC3_UTILS_DIR	=	vector3_utils/
-#HITBL_UTILS_DIR	=	hittable_utils/
+OBJ_UTILS_DIR	=	objects_utils/
 #MATER_UTILS_DIR	=	material_utils/
 INTRV_UTILS_DIR	=	intervals_utils/
+LIGHT_UTILS_DIR	=	light_utils/
 
 # Files
 F_ERRORS		=	errors
 F_UTILS			=	cleaning
-F_INIT			=	base_init
+F_INIT			=	base_init camera_utils
 #F_PARSING		=	file_parse creating_objs creating_uniques defaults
 F_COLOR			=	color color_ops1
 F_DRAW			=	draw
 F_HOOKS			=	handle_hooks
-#F_MATH_UTILS	=	rng angles swap
+F_MATH_UTILS	=	rng angles swap close_enough
 #F_AABB_UTILS	=	aabb
 F_VEC3_UTILS	=	vector3 vector3_ops1 vector3_ops2 vector3_rand vector3_comp
 F_RAY_UTILS		=	ray
-#F_HITBL_UTILS	=	hittable
+F_OBJ_UTILS		=	intersections_funcs obj_list_utils
 #F_MATER_UITLS	=	scatter_funcs material mat_ray_mods
 F_INTRV_UTILS	=	intervals intervals_ops
+F_LIGHT_UTILS	=	light_funcs
 
 FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(ERRORS_DIR), $(F_ERRORS)) \
@@ -68,6 +70,9 @@ FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(INTRV_UTILS_DIR), $(F_INTRV_UTILS)) \
 				$(addprefix $(VEC3_UTILS_DIR), $(F_VEC3_UTILS)) \
 				$(addprefix $(RAY_UTILS_DIR), $(F_RAY_UTILS)) \
+				$(addprefix $(OBJ_UTILS_DIR), $(F_OBJ_UTILS)) \
+				$(addprefix $(MATH_UTILS_DIR), $(F_MATH_UTILS)) \
+				$(addprefix $(LIGHT_UTILS_DIR), $(F_LIGHT_UTILS)) \
 
 SRCS		=	src/main.c \
 				$(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES))) \
@@ -95,13 +100,14 @@ $(OBJS_DIR):
 #	@mkdir -p $(OBJS_DIR)$(PARSING_DIR)
 	@mkdir -p $(OBJS_DIR)$(COLOR_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(DRAW_DIR)
-#	@mkdir -p $(OBJS_DIR)$(MATH_UTILS_DIR)
+	@mkdir -p $(OBJS_DIR)$(MATH_UTILS_DIR)
 #	@mkdir -p $(OBJS_DIR)$(AABB_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(VEC3_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(RAY_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(INTRV_UTILS_DIR)
-#	@mkdir -p $(OBJS_DIR)$(HITBL_UTILS_DIR)
+	@mkdir -p $(OBJS_DIR)$(OBJ_UTILS_DIR)
 #	@mkdir -p $(OBJS_DIR)$(MATER_UTILS_DIR)
+	@mkdir -p $(OBJS_DIR)$(LIGHT_UTILS_DIR)
 
 clean :
 	@make clean -C ./libft

@@ -6,27 +6,41 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:13:10 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/08 15:56:08 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/09 11:28:52 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-t_ray	ft_ray_new(const t_vector3 origin, const t_vector3 dir)
+t_ray	ft_ray_new(const t_vector3 p1, const t_vector3 p2)
 {
 	t_ray	ray;
 
-	ray.origin = origin;
-	ray.dir = dir;
+	ray.p1 = p1;
+	ray.p2 = p2;
+	ray.lab = ft_vec3_sub(p2, p1);
 	return (ray);
 }
 
-t_vector3	ft_ray_at(const t_ray ray, const double t)
+int	ft_generate_ray(t_camera cam, float proj_screen_x, float proj_screen_y, t_ray *camera_ray)
+{
+	t_vector3	screen_world_p1;
+	t_vector3	screen_world_coord;
+
+	screen_world_p1 = ft_vec3_add(cam.proj_screen_center, ft_vec3_mult(cam.proj_screen_u, proj_screen_x));
+	screen_world_coord = ft_vec3_add(screen_world_p1, ft_vec3_mult(cam.proj_screen_v, proj_screen_y));
+	camera_ray->p1 = cam.lookfrom;
+	camera_ray->p2 = screen_world_coord;
+	camera_ray->lab = ft_vec3_sub(screen_world_coord, cam.lookfrom);
+	return (true);
+}
+
+/* t_vector3	ft_ray_at(const t_ray ray, const double t)
 {
 	return (ft_vec3_add(ray.origin, ft_vec3_mult(ray.dir, t)));
 }
 
-/* t_ray	ft_ray_calculate(t_base *base, int i, int j)
+t_ray	ft_ray_calculate(t_base *base, int i, int j)
 {
 	t_vector3	offset;
 	t_vector3	pixel_sample;
