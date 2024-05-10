@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sbrt.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/09 15:47:28 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/10 12:32:40 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 # include <limits.h>
 
 /* Libraries External */
-# include "../minilibx/mlx.h"
+# include <mlx.h>
+//# include "../minilibx/mlx.h"
 # include "../libft/includes/libft.h"
 
 /* Defines */
@@ -109,6 +110,8 @@ typedef struct s_hit_rec
 	double				t;
 	int					front_face;
 	t_color				emmited;
+	t_color				color;
+	double				intensity;
 	struct s_base		*base;
 }						t_hit_rec;
 
@@ -233,6 +236,7 @@ typedef struct s_base
 	int				exit_code;
 	unsigned long	seed;
 	t_objects		*first_object;
+	t_light			*first_light;
 }					t_base;
 
 /* Alternative structures */
@@ -344,7 +348,7 @@ int			ft_close_enough(const double f1, const double f2);
 
 /* Hittable Utils */
 void		ft_set_hit_func(t_objects *new_object, int type);
-int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec);
+int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec, t_light *lights);
 int			ft_sphere_hit(const void *sphere_obj, const t_ray r, t_hit_rec *rec);
 int			ft_hit_plane(const void *plane_obj, const t_ray r,
 				const t_inter ray_t, t_hit_rec *rec);
@@ -417,5 +421,10 @@ t_aabb		ft_aabb_new(const t_inter x, const t_inter y, const t_inter z);
 t_aabb		ft_aabb_new2(const t_vector3 a, const t_vector3 b);
 t_aabb		ft_aabb_new3(const t_aabb box0, const t_aabb box1);
 int			ft_aabb_hit(const t_aabb aabb, const t_ray r, t_inter ray_t);
+
+/* Light Utils */
+void		ft_light_add(t_light **light, t_light *new);
+t_light		*ft_light_new(t_vector3 coord, t_color	color, double intensity);
+int			ft_calc_lights(t_objects *list, t_objects *current, t_hit_rec *rec, t_light *lights);
 
 #endif

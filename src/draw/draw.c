@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:08:51 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/09 14:59:12 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/10 12:45:19 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ void	ft_render(t_base *base)
 		while (++index[0] < WIN_WIDTH)
 		{
 			ft_generate_ray(*base->camera, ((double)index[0] * fact_xy[0]) - 1, ((double)index[1] * fact_xy[1]) - 1, &r);
-			if (ft_hit_anything(base->first_object, r, &rec))
+			if (ft_hit_anything(base->first_object, r, &rec, base->first_light))
 			{
-				double dist = ft_vec3_len(ft_vec3_sub(rec.p, r.p1));
-				ft_pixel_put(base, index[0], index[1], ft_get_color_int(ft_color_new(0, 1 - (dist - 9) / .94605, 0, 0)));
+				
+//				double dist = ft_vec3_len(ft_vec3_sub(rec.p, r.p1));
+				printf("red: %f\n", 1 * rec.intensity);
+				ft_pixel_put(base, index[0], index[1], ft_get_color_int(ft_color_new(0, 1 * rec.intensity, 0, 0)));
 			}
 		}
 		mlx_put_image_to_window(base->mlx_ptr, base->win_ptr,
