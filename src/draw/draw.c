@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:08:51 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/10 12:45:19 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/14 10:53:00 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ void	ft_render(t_base *base)
 		printf("Scanlines remaining: %d\n", WIN_HEIGHT - index[1]);
 		while (++index[0] < WIN_WIDTH)
 		{
-			ft_generate_ray(*base->camera, ((double)index[0] * fact_xy[0]) - 1, ((double)index[1] * fact_xy[1]) - 1, &r);
-			if (ft_hit_anything(base->first_object, r, &rec, base->first_light))
+			ft_generate_ray(*base->camera, ((double)index[0] * fact_xy[0]) - 1.0, ((double)index[1] * fact_xy[1]) - 1.0, &r);
+			if (ft_hit_anything(base->first_object, r, &rec))
 			{
-				
-//				double dist = ft_vec3_len(ft_vec3_sub(rec.p, r.p1));
-				printf("red: %f\n", 1 * rec.intensity);
-				ft_pixel_put(base, index[0], index[1], ft_get_color_int(ft_color_new(0, 1 * rec.intensity, 0, 0)));
+				if (ft_calc_lights(NULL, NULL, &rec, base->first_light))
+				{
+					ft_pixel_put(base, index[0], index[1], ft_get_color_int(ft_color_new(0, 1 * rec.intensity, 0, 0)));
+				}
 			}
 		}
 		mlx_put_image_to_window(base->mlx_ptr, base->win_ptr,

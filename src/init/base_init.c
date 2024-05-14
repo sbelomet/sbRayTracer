@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:47:15 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/10 12:39:50 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/14 10:49:59 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_light	*ft_lights_init(void)
 	t_light	*list;
 
 	list = NULL;
-	ft_light_add(&list, ft_light_new(ft_vec3_new(5, -10, -5), ft_color_new(0, 1, 1, 1), 1));
+	ft_light_add(&list, ft_light_new(ft_vec3_new(-5, 5, 3), ft_color_new(0, 1, 1, 1), 1));
 	return (list);
 }
 

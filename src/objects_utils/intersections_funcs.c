@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersections_funcs.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 11:11:35 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/10 12:44:13 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/14 10:22:46 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_sphere_hit(const void *sphere_obj, const t_ray r, t_hit_rec *rec)
 		return (false);
 }
 
-int	ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec, t_light *lights)
+int	ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec)
 {
 	t_objects	*tmp_list;
 	t_hit_rec	tmp_rec;
@@ -58,14 +58,9 @@ int	ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec, t_light *lig
 	{
 		if (tmp_list->ft_hit(tmp_list->object, r, &tmp_rec))
 		{
-			if (ft_calc_lights(list, tmp_list, &tmp_rec, lights))
-			{
-				hit_anything = true;
-				rec->p = tmp_rec.p;
-				rec->normal = tmp_rec.normal;
-				rec->color = tmp_rec.color;
-				rec->intensity = tmp_rec.intensity;
-			}
+			hit_anything = true;
+			rec->p = tmp_rec.p;
+			rec->normal = tmp_rec.normal;
 		}
 		tmp_list = tmp_list->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sbrt.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/10 12:32:40 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/14 15:49:27 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <limits.h>
 
 /* Libraries External */
-# include <mlx.h>
-//# include "../minilibx/mlx.h"
+//# include <mlx.h>
+# include "../minilibx/mlx.h"
 # include "../libft/includes/libft.h"
 
 /* Defines */
@@ -34,6 +34,9 @@
 # define EPSILON 0.0001
 # define PIX_SAMPLE_SCALE 0.025
 # define MAX_DEPTH 10
+
+# define FWDFORM 1
+# define BCKFORM 0
 
 # define TITLE "BetterBlender"
 # define MALLOC_ERR "Malloc error"
@@ -80,6 +83,28 @@ typedef struct s_vector3
 	double	y;
 	double	z;
 }			t_vector3;
+
+typedef struct s_vector4
+{
+	double	x;
+	double	y;
+	double	z;
+	double	w;
+}			t_vector4;
+
+typedef struct s_matrix
+{
+	t_vector4	c1;
+	t_vector4	c2;
+	t_vector4	c3;
+	t_vector4	c4;
+}				t_matrix;
+
+typedef struct s_gtform
+{
+	t_matrix	fwdtfm;
+	t_matrix	bcktfm;
+}				t_gtform;
 
 typedef struct s_color
 {
@@ -257,7 +282,7 @@ typedef struct s_equation
 	double  t;
 	double	t1;
 	double	t2;
-	t_vector3   oc;
+	t_vector3	oc;
 }	            t_equation;
 
 void    ft_render2(t_base *base);
@@ -348,7 +373,7 @@ int			ft_close_enough(const double f1, const double f2);
 
 /* Hittable Utils */
 void		ft_set_hit_func(t_objects *new_object, int type);
-int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec, t_light *lights);
+int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec);
 int			ft_sphere_hit(const void *sphere_obj, const t_ray r, t_hit_rec *rec);
 int			ft_hit_plane(const void *plane_obj, const t_ray r,
 				const t_inter ray_t, t_hit_rec *rec);
@@ -383,9 +408,26 @@ t_vector3	ft_vec3_rand_hemis(t_base *base, const t_vector3 normal);
 int			ft_vec3_grtr(const t_vector3 v1, const t_vector3 v2);
 int			ft_vec3_lssr(const t_vector3 v1, const t_vector3 v2);
 
+/* Vector4 Utils */
+t_vector4	ft_vec4_new(const double x, const double y, const double z,
+			const double w);
+void		ft_vec4_print(const t_vector4 v, const char *name);
+
+/* Matrix Utils */
+t_matrix	ft_mtrx_new(void);
+t_matrix	ft_mtrx_new2(const t_vector4 x, const t_vector4 y,
+			const t_vector4 z, const t_vector4 w);
+void		ft_mtrx_print(const t_matrix m, const char *name);
+t_matrix	ft_mtrx_mult_mtrx(const t_matrix m1, const t_matrix m2);
+
+/* Geometric Transforms Utils */
+t_gtform	ft_gtf_new(void);
+t_gtform	ft_gtf_new2(const t_matrix fwd, const t_matrix bck);
+
 /* Ray Utils */
 t_ray		ft_ray_new(const t_vector3 p1, const t_vector3 p2);
-int			ft_generate_ray(t_camera cam, float proj_screen_x, float proj_screen_y, t_ray *camera_ray);
+int			ft_generate_ray(t_camera cam, float proj_screen_x,
+			float proj_screen_y, t_ray *camera_ray);
 t_vector3	ft_ray_at(const t_ray ray, const double t);
 t_ray		ft_ray_calculate(t_base *base, int i, int j);
 t_color		ft_ray_color(t_base *base, t_ray r, int depth, t_objects *world);
