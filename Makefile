@@ -6,7 +6,7 @@
 #    By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/14 10:06:00 by lgosselk          #+#    #+#              #
-#    Updated: 2024/05/14 09:52:36 by sbelomet         ###   ########.fr        #
+#    Updated: 2024/05/16 15:17:15 by sbelomet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,8 @@ OBJ_UTILS_DIR	=	objects_utils/
 #MATER_UTILS_DIR	=	material_utils/
 INTRV_UTILS_DIR	=	intervals_utils/
 LIGHT_UTILS_DIR	=	light_utils/
+GTFM_DIR		=	geometric_tfm/
+MTRX_UTILS_DIR	=	matrices_utils/
 
 # Files
 F_ERRORS		=	errors
@@ -60,6 +62,8 @@ F_OBJ_UTILS		=	intersections_funcs obj_list_utils
 #F_MATER_UITLS	=	scatter_funcs material mat_ray_mods
 F_INTRV_UTILS	=	intervals intervals_ops
 F_LIGHT_UTILS	=	light_funcs light_list_utils
+F_GTFM			=	gtform gtfm_transforms
+F_MTRX_UTILS	=	matrices matrices_ops matrices_inverse matrices_deter
 
 FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(ERRORS_DIR), $(F_ERRORS)) \
@@ -73,6 +77,8 @@ FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(OBJ_UTILS_DIR), $(F_OBJ_UTILS)) \
 				$(addprefix $(MATH_UTILS_DIR), $(F_MATH_UTILS)) \
 				$(addprefix $(LIGHT_UTILS_DIR), $(F_LIGHT_UTILS)) \
+				$(addprefix $(GTFM_DIR), $(F_GTFM)) \
+				$(addprefix $(MTRX_UTILS_DIR), $(F_MTRX_UTILS)) \
 
 SRCS		=	src/main.c \
 				$(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES))) \
@@ -108,6 +114,8 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)$(OBJ_UTILS_DIR)
 #	@mkdir -p $(OBJS_DIR)$(MATER_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(LIGHT_UTILS_DIR)
+	@mkdir -p $(OBJS_DIR)$(GTFM_DIR)
+	@mkdir -p $(OBJS_DIR)$(MTRX_UTILS_DIR)
 
 clean :
 	@make clean -C ./libft

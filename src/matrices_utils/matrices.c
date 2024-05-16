@@ -6,23 +6,35 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 11:33:44 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/14 14:40:21 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/16 11:41:51 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-t_matrix	ft_mtr_new(void)
+t_matrix	ft_mtrx_new(void)
 {
 	t_matrix	m;
+	int			i;
+	int			j;
 
-	m.c1 = ft_vec4_new(1, 0, 0, 0);
-	m.c2 = ft_vec4_new(0, 1, 0, 0);
-	m.c3 = ft_vec4_new(0, 0, 1, 0);
-	m.c4 = ft_vec4_new(0, 0, 0, 1);
+	i = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			if (i == j)
+				m.m[i][j] = 1;
+			else
+				m.m[i][j] = 0;
+			j++;
+		}
+		i++;
+	}
 	return (m);
 }
-
+/* 
 t_matrix	ft_mtrx_new2(const t_vector4 x, const t_vector4 y,
 	const t_vector4 z, const t_vector4 w)
 {
@@ -33,13 +45,13 @@ t_matrix	ft_mtrx_new2(const t_vector4 x, const t_vector4 y,
 	m.c3 = z;
 	m.c4 = w;
 	return (m);
-}
+} */
 
 void	ft_mtrx_print(const t_matrix m, const char *name)
 {
 	printf("Matrix %s:\n", name);
-	printf("[%f][%f][%f][%f]\n", m.c1.x, m.c1.y, m.c1.z, m.c1.w);
-	printf("[%f][%f][%f][%f]\n", m.c2.x, m.c2.y, m.c2.z, m.c2.w);
-	printf("[%f][%f][%f][%f]\n", m.c3.x, m.c3.y, m.c3.z, m.c3.w);
-	printf("[%f][%f][%f][%f]\n", m.c4.x, m.c4.y, m.c4.z, m.c4.w);
+	printf("[%f][%f][%f][%f]\n", m.m[0][0], m.m[0][1], m.m[0][2], m.m[0][3]);
+	printf("[%f][%f][%f][%f]\n", m.m[1][0], m.m[1][1], m.m[1][2], m.m[1][3]);
+	printf("[%f][%f][%f][%f]\n", m.m[2][0], m.m[2][1], m.m[2][2], m.m[2][3]);
+	printf("[%f][%f][%f][%f]\n", m.m[3][0], m.m[3][1], m.m[3][2], m.m[3][3]);
 }

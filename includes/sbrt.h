@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/14 15:49:27 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:04:07 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,8 @@ typedef struct s_vector4
 
 typedef struct s_matrix
 {
-	t_vector4	c1;
-	t_vector4	c2;
-	t_vector4	c3;
-	t_vector4	c4;
-}				t_matrix;
+	double	m[4][4];
+}			t_matrix;
 
 typedef struct s_gtform
 {
@@ -419,10 +416,14 @@ t_matrix	ft_mtrx_new2(const t_vector4 x, const t_vector4 y,
 			const t_vector4 z, const t_vector4 w);
 void		ft_mtrx_print(const t_matrix m, const char *name);
 t_matrix	ft_mtrx_mult_mtrx(const t_matrix m1, const t_matrix m2);
+double		ft_mtrx_det(t_matrix *m, int size);
+t_matrix	ft_mtrx_inverse(const t_matrix m);
 
 /* Geometric Transforms Utils */
 t_gtform	ft_gtf_new(void);
 t_gtform	ft_gtf_new2(const t_matrix fwd, const t_matrix bck);
+void		ft_gtf_set_transform(t_gtform *gt, const t_vector3 trans,
+			const t_vector3 rot, const t_vector3 scale);
 
 /* Ray Utils */
 t_ray		ft_ray_new(const t_vector3 p1, const t_vector3 p2);
