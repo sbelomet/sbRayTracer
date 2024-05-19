@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   material.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/08 11:38:22 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/18 15:10:52 by scherty          ###   ########.fr       */
+/*   Created: 2024/04/24 10:53:59 by sbelomet          #+#    #+#             */
+/*   Updated: 2024/05/19 13:51:26 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-int	main(int ac, char **av)
+t_material	*ft_mat_new(t_color (*ft_comp_color)
+	(t_objects *, t_hit_rec *, t_light *))
 {
-	t_base		base;
+	t_material	*mat;
 
-	if (ft_base_init(&base) == 1)
-		on_destroy(&base);
-	ft_render(&base);
-	ft_hooks(&base);
-	(void)ac;
-	(void)av;
+	mat = (t_material *)malloc(sizeof(t_material));
+	mat->ft_comp_color = ft_comp_color;
+	mat->reflect = 0;
+	mat->shine = 0;
+	return (mat);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:06:19 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/09 11:31:54 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/18 22:39:39 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,15 @@ t_camera	*ft_cam_new(void)
 	t_camera	*cam;
 
 	cam = (t_camera *)malloc(sizeof(t_camera));
-	cam->lookfrom = ft_vec3_new(0, -10, 0);
+	if (!cam)
+		return (NULL);
+	cam->lookfrom = ft_vec3_new(0, -10, -2);
 	cam->lookat = ft_vec3_new(0, 0, 0);
 	cam->vup = ft_vec3_new(0, 0, 1);
 	cam->length = 1;
 	cam->horz_size = .25;
 	cam->aspect = 16.0 / 9.0;
+	ft_update_cam(cam);
 	return (cam);
 }
 

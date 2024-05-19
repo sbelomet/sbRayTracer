@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   gtform_ops.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/08 11:38:22 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/18 15:10:52 by scherty          ###   ########.fr       */
+/*   Created: 2024/05/17 14:47:37 by scherty           #+#    #+#             */
+/*   Updated: 2024/05/17 14:49:54 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-int	main(int ac, char **av)
+t_gtform	ft_gtf_mult(const t_gtform g1, const t_gtform g2)
 {
-	t_base		base;
+	t_gtform	gt;
 
-	if (ft_base_init(&base) == 1)
-		on_destroy(&base);
-	ft_render(&base);
-	ft_hooks(&base);
-	(void)ac;
-	(void)av;
+	gt.fwdtfm = ft_mtrx_mult_mtrx(g1.fwdtfm, g2.fwdtfm);
+	gt.bcktfm = ft_mtrx_inverse(gt.fwdtfm);
+	return (gt);
 }

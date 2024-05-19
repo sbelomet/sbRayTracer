@@ -3,44 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   light_funcs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 15:15:10 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/14 11:01:56 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:54:24 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-int	ft_compute_light(t_objects *list, t_objects *current, t_hit_rec *rec, t_light *l)
+int	ft_compute_shadow(t_objects *list, t_objects *current, t_hit_rec *rec, t_ray light_ray)
+{
+	t_objects	*tmp_obj;
+	int			shadow_good;
+
+	tmp_obj = list;
+	shadow_good = false;
+	while (tmp_obj)
+	{
+		if (tmp_obj != current)
+		{
+			if (tmp_obj->ft_hit(tmp_obj->object, light_ray, rec))
+			{
+				shadow_good = true;
+				break ;
+			}
+		}
+		tmp_obj = tmp_obj->next;
+	}
+	return (shadow_good);
+}
+
+int	ft_compute_light(t_objects *list, t_hit_rec *rec, t_light *l)
 {
 	t_vector3	light_dir;
-//	t_vector3	start_point;
+	t_vector3	start_point;
 	double		angle;
+	t_ray		light_ray;
+	t_hit_rec	light_rec;
 
-	(void)list;
-	(void)current;
 	light_dir = ft_vec3_unit(ft_vec3_sub(l->coord, rec->p));
-	//ft_vec3_print(light_dir, "coord");
-//	start_point = rec->p;
-	angle = acos(ft_vec3_dot(rec->normal, light_dir));
-	if (angle > 1.5708)
+	start_point = rec->p;
+	light_ray = ft_ray_new(start_point, ft_vec3_add(start_point, light_dir));
+	if (!ft_compute_shadow(list, rec->object, &light_rec, light_ray))
 	{
-		//ft_vec3_print(rec->normal, "away: normal");
-		rec->color = l->color;
-		rec->intensity = 0.0;
-		return (false);
+		angle = acos(ft_vec3_dot(rec->normal, light_dir));
+		if (angle > 1.5708)
+		{
+			rec->emmited = l->color;
+			rec->intensity = 0.0;
+			return (false);
+		}
+		else
+		{
+			rec->emmited = l->color;
+			rec->intensity = l->ratio * (1.0 - (angle / 1.5708));
+			return (true);
+		}
 	}
 	else
 	{
-		//ft_vec3_print(rec->normal, "to: normal");
-		rec->color = l->color;
-		rec->intensity = l->ratio * (1 - (angle / 1.5708));
-		return (true);
+		rec->emmited = l->color;
+		rec->intensity = 0.0;
+		return (false);
 	}
 }
 
-int	ft_calc_lights(t_objects *list, t_objects *current, t_hit_rec *rec, t_light *lights)
+int	ft_calc_lights(t_objects *list, t_hit_rec *rec, t_light *lights)
 {
 	t_light		*tmp_light;
 	t_hit_rec	tmp_rec;
@@ -48,12 +77,14 @@ int	ft_calc_lights(t_objects *list, t_objects *current, t_hit_rec *rec, t_light 
 
 	tmp_light = lights;
 	light_good = false;
+	rec->emmited = ft_color_new(0, 0, 0, 0);
+	tmp_rec = *rec;
 	while (tmp_light)
 	{
-		if (ft_compute_light(list, current, &tmp_rec, tmp_light))
+		if (ft_compute_light(list, &tmp_rec, tmp_light))
 		{
 			light_good = true;
-			rec->color = tmp_rec.color;
+			rec->emmited = ft_color_add(rec->emmited, ft_color_mult(tmp_rec.emmited, tmp_rec.intensity));
 			rec->intensity = tmp_rec.intensity;
 		}
 		tmp_light = tmp_light->next;

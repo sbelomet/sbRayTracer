@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   obj_list_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:24:54 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/09 15:05:26 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:09:08 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void	ft_set_hit_func(t_objects *new_object, int type)
 {
 	if (type == SPHERE)
 		new_object->ft_hit = ft_sphere_hit;
-/* 	else if (type == PLANE)
-		new_object->ft_hit = ft_hit_plane;
-	else if (type == CYLINDER)
+ 	else if (type == PLANE)
+		new_object->ft_hit = ft_plane_hit;
+/*	else if (type == CYLINDER)
 		new_object->ft_hit = ft_hit_cylinder; */
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sbrt.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/16 15:04:07 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/19 13:51:56 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <limits.h>
 
 /* Libraries External */
-//# include <mlx.h>
-# include "../minilibx/mlx.h"
+# include <mlx.h>
+//# include "../minilibx/mlx.h"
 # include "../libft/includes/libft.h"
 
 /* Defines */
@@ -44,6 +44,7 @@
 # define BAD_ARGS "Bad number of arguments"
 # define MLX_ERR "MLX initialisation failure"
 # define IMG_ERR "Image initialisation failure"
+# define CAM_ERR "Camera initialisation failure"
 # define FILE_ERR "Cannot open file with path: "
 # define WIN_ERR "Window initialisation failure"
 
@@ -126,6 +127,7 @@ typedef struct s_inter
 
 typedef struct s_hit_rec
 {
+	struct s_objects	*object;
 	t_vector3			p;
 	t_vector3			normal;
 	struct s_material	*mat;
@@ -136,15 +138,6 @@ typedef struct s_hit_rec
 	double				intensity;
 	struct s_base		*base;
 }						t_hit_rec;
-
-typedef struct s_material
-{
-	int		material;
-	t_color	albedo;
-	double	fuzz;
-	double	ref_index;
-	int		(*ft_scatter)(const t_ray, const t_hit_rec, t_color *, t_ray *);
-}				t_material;
 
 typedef struct s_aabb
 {
@@ -185,33 +178,35 @@ typedef struct s_light
 
 typedef struct s_sphere
 {
-	t_vector3	center;
-	double		diam;
-	double		radius;
-	t_color		color;
-	t_material	*mat;
-}				t_sphere;
+	t_vector3			center;
+	double				diam;
+	double				radius;
+	t_color				color;
+	struct s_material	*mat;
+	t_gtform			tm;
+}						t_sphere;
 
 typedef struct s_plane
 {
-	t_vector3	coord;
-	t_vector3	norm;
-	t_color		color;
-	t_material	*mat;
-}				t_plane;
+	t_vector3			coord;
+	t_vector3			norm;
+	t_color				color;
+	struct s_material	*mat;
+	t_gtform			tm;
+}						t_plane;
 
 typedef struct s_cylin
 {
-	t_vector3	coord;
-	t_vector3	ori;
-	double		diam;
-	double		radius;
-	double		height;
-	t_vector3	min;
-	t_vector3	max;
-	t_color		color;
-	t_material	*mat;
-}				t_cylin;
+	t_vector3			coord;
+	t_vector3			ori;
+	double				diam;
+	double				radius;
+	double				height;
+	t_vector3			min;
+	t_vector3			max;
+	t_color				color;
+	struct s_material	*mat;
+}						t_cylin;
 
 /* Other structures */
 
@@ -229,6 +224,13 @@ typedef struct s_objects
 	int					(*ft_hit)(const void *, const t_ray, t_hit_rec *);
 	struct s_objects	*next;
 }					t_objects;
+
+typedef struct s_material
+{
+	double	reflect;
+	double	shine;
+	t_color	(*ft_comp_color)(t_objects *, t_hit_rec *, t_light *);
+}			t_material;
 
 typedef struct s_uniques
 {
@@ -372,8 +374,7 @@ int			ft_close_enough(const double f1, const double f2);
 void		ft_set_hit_func(t_objects *new_object, int type);
 int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec);
 int			ft_sphere_hit(const void *sphere_obj, const t_ray r, t_hit_rec *rec);
-int			ft_hit_plane(const void *plane_obj, const t_ray r,
-				const t_inter ray_t, t_hit_rec *rec);
+int			ft_plane_hit(const void *plane_obj, const t_ray r, t_hit_rec *rec);
 int			ft_hit_cylinder(const void *cylinder_obj, const t_ray r,
 				const t_inter ray_t, t_hit_rec *rec);
 t_objects	*ft_object_new(void *object, int type);
@@ -409,6 +410,7 @@ int			ft_vec3_lssr(const t_vector3 v1, const t_vector3 v2);
 t_vector4	ft_vec4_new(const double x, const double y, const double z,
 			const double w);
 void		ft_vec4_print(const t_vector4 v, const char *name);
+t_vector4	ft_vec4_mult_mtrx(const t_vector4 v, const t_matrix m);
 
 /* Matrix Utils */
 t_matrix	ft_mtrx_new(void);
@@ -422,8 +424,12 @@ t_matrix	ft_mtrx_inverse(const t_matrix m);
 /* Geometric Transforms Utils */
 t_gtform	ft_gtf_new(void);
 t_gtform	ft_gtf_new2(const t_matrix fwd, const t_matrix bck);
+t_gtform	ft_gtf_mult(const t_gtform g1, const t_gtform g2);
 void		ft_gtf_set_transform(t_gtform *gt, const t_vector3 trans,
 			const t_vector3 rot, const t_vector3 scale);
+t_ray		ft_gtf_apply_ray(const t_gtform gt, const t_ray r, const int dir_flag);
+t_vector3	ft_gtf_apply_vec3(const t_gtform gt, const t_vector3 v,
+			const int dir_flag);
 
 /* Ray Utils */
 t_ray		ft_ray_new(const t_vector3 p1, const t_vector3 p2);
@@ -442,8 +448,8 @@ double		ft_inter_clamp(const t_inter inter, const double x);
 t_inter		ft_inter_expand(const t_inter inter, const double delta);
 
 /* Material Utils */
-t_material	*ft_mat_new(int type, t_color albedo, int (*ft_scatter)
-				(const t_ray, const t_hit_rec, t_color *, t_ray *));
+t_material	*ft_mat_new(t_color (*ft_comp_color)(t_objects *, t_hit_rec *, t_light *));
+t_color		ft_comp_diffuse_color(t_objects *list, t_hit_rec *rec, t_light *lights);
 t_vector3	ft_reflect(const t_vector3 v, const t_vector3 n);
 t_vector3	ft_refract(const t_vector3 uv,
 				const t_vector3 n, double etai_over_etat);
@@ -468,6 +474,6 @@ int			ft_aabb_hit(const t_aabb aabb, const t_ray r, t_inter ray_t);
 /* Light Utils */
 void		ft_light_add(t_light **light, t_light *new);
 t_light		*ft_light_new(t_vector3 coord, t_color	color, double intensity);
-int			ft_calc_lights(t_objects *list, t_objects *current, t_hit_rec *rec, t_light *lights);
+int			ft_calc_lights(t_objects *list, t_hit_rec *rec, t_light *lights);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
+/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 10:21:25 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/08 15:00:42 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/18 14:48:09 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	ft_get_color_int(t_color color)
 	int		cints[4];
 	t_inter	intensity;
 
-	color.red = ft_linear_to_gamma(color.red);
+	/* color.red = ft_linear_to_gamma(color.red);
 	color.green = ft_linear_to_gamma(color.green);
-	color.blue = ft_linear_to_gamma(color.blue);
+	color.blue = ft_linear_to_gamma(color.blue); */
 	intensity = ft_inter_new(0.000, 0.999);
 	cints[0] = (int)(256 * ft_inter_clamp(intensity, color.alpha));
 	cints[1] = (int)(256 * ft_inter_clamp(intensity, color.red));

@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   vector4_ops.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/08 11:38:22 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/18 15:10:52 by scherty          ###   ########.fr       */
+/*   Created: 2024/05/17 14:26:35 by scherty           #+#    #+#             */
+/*   Updated: 2024/05/17 14:40:34 by scherty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-int	main(int ac, char **av)
+t_vector4	ft_vec4_mult_mtrx(const t_vector4 v, const t_matrix m)
 {
-	t_base		base;
+	t_vector4   res;
 
-	if (ft_base_init(&base) == 1)
-		on_destroy(&base);
-	ft_render(&base);
-	ft_hooks(&base);
-	(void)ac;
-	(void)av;
+	res.x = v.x * m.m[0][0] + v.y * m.m[0][1]
+			+ v.z * m.m[0][2] + v.w * m.m[0][3];
+	res.y = v.x * m.m[1][0] + v.y * m.m[1][1]
+			+ v.z * m.m[1][2] + v.w * m.m[1][3];
+	res.z = v.x * m.m[2][0] + v.y * m.m[2][1]
+			+ v.z * m.m[2][2] + v.w * m.m[2][3];
+	res.w = v.x * m.m[3][0] + v.y * m.m[3][1]
+			+ v.z * m.m[3][2] + v.w * m.m[3][3];
+	return (res);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+         #
+#    By: scherty <scherty@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/14 10:06:00 by lgosselk          #+#    #+#              #
-#    Updated: 2024/05/16 15:17:15 by sbelomet         ###   ########.fr        #
+#    Updated: 2024/05/19 13:25:55 by scherty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,7 @@ GCC			=	gcc
 RM			=	rm -rf
 HEADER		=	-I includes
 LIBFT_PATH	=	./libft/libft.a
-MLX_PATH	=	./minilibx/libmlx.a
-GCCFLAGS	= 	-Wall -Wextra -Werror
-MLXFLAGS	=	-Lminilibx -lmlx -framework OpenGL -framework AppKit
+GCCFLAGS	= 	-Wall -Wextra -Werror -Wno-unused-result
 
 DEFAULT	=	\033[0m
 RED		=	\033[1;31m
@@ -39,8 +37,9 @@ MATH_UTILS_DIR	=	math_utils/
 #AABB_UTILS_DIR	=	aabb_utils/
 COLOR_UTILS_DIR	=	color_utils/
 VEC3_UTILS_DIR	=	vector3_utils/
+VEC4_UTILS_DIR	=	vector4_utils/
 OBJ_UTILS_DIR	=	objects_utils/
-#MATER_UTILS_DIR	=	material_utils/
+MATER_UTILS_DIR	=	material_utils/
 INTRV_UTILS_DIR	=	intervals_utils/
 LIGHT_UTILS_DIR	=	light_utils/
 GTFM_DIR		=	geometric_tfm/
@@ -57,12 +56,13 @@ F_HOOKS			=	handle_hooks
 F_MATH_UTILS	=	rng angles swap close_enough
 #F_AABB_UTILS	=	aabb
 F_VEC3_UTILS	=	vector3 vector3_ops1 vector3_ops2 vector3_rand vector3_comp
+F_VEC4_UTILS	=	vector4 vector4_ops
 F_RAY_UTILS		=	ray
 F_OBJ_UTILS		=	intersections_funcs obj_list_utils
-#F_MATER_UITLS	=	scatter_funcs material mat_ray_mods
+F_MATER_UITLS	=	material mat_funcs
 F_INTRV_UTILS	=	intervals intervals_ops
 F_LIGHT_UTILS	=	light_funcs light_list_utils
-F_GTFM			=	gtform gtfm_transforms
+F_GTFM			=	gtform gtfm_transforms gtform_ops
 F_MTRX_UTILS	=	matrices matrices_ops matrices_inverse matrices_deter
 
 FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
@@ -73,8 +73,10 @@ FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(COLOR_UTILS_DIR), $(F_COLOR)) \
 				$(addprefix $(INTRV_UTILS_DIR), $(F_INTRV_UTILS)) \
 				$(addprefix $(VEC3_UTILS_DIR), $(F_VEC3_UTILS)) \
+				$(addprefix $(VEC4_UTILS_DIR), $(F_VEC4_UTILS)) \
 				$(addprefix $(RAY_UTILS_DIR), $(F_RAY_UTILS)) \
 				$(addprefix $(OBJ_UTILS_DIR), $(F_OBJ_UTILS)) \
+				$(addprefix $(MATER_UTILS_DIR), $(F_MATER_UITLS)) \
 				$(addprefix $(MATH_UTILS_DIR), $(F_MATH_UTILS)) \
 				$(addprefix $(LIGHT_UTILS_DIR), $(F_LIGHT_UTILS)) \
 				$(addprefix $(GTFM_DIR), $(F_GTFM)) \
@@ -87,14 +89,14 @@ SRCS		=	src/main.c \
 OBJS		=	objs/main.o \
 				$(addprefix $(OBJS_DIR), $(addsuffix .o, $(FILES))) \
 
-all : _libft _mlx $(OBJS_DIR) $(NAME)
+all : _libft $(OBJS_DIR) $(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT_PATH) $(MLX_PATH)
-	@$(GCC) $(GCCFLAGS) $(OBJS) $(LIBFT_PATH) $(MLX_PATH) $(MLXFLAGS) -o $(NAME) 
+	@$(GCC) $(GCCFLAGS) $(OBJS) $(LIBFT_PATH) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
 	@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
-	@$(GCC) $(GCCFLAGS) $(HEADER) -o $@ -c $<
+	@$(GCC) $(GCCFLAGS) $(HEADER) -I/usr/include -Imlx_linux -O3 -o $@ -c $<
 	@echo "$(YELLOW)$< added to the oven!$(DEFAULT)"
 
 $(OBJS_DIR):
@@ -109,40 +111,28 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)$(MATH_UTILS_DIR)
 #	@mkdir -p $(OBJS_DIR)$(AABB_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(VEC3_UTILS_DIR)
+	@mkdir -p $(OBJS_DIR)$(VEC4_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(RAY_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(INTRV_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(OBJ_UTILS_DIR)
-#	@mkdir -p $(OBJS_DIR)$(MATER_UTILS_DIR)
+	@mkdir -p $(OBJS_DIR)$(MATER_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(LIGHT_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(GTFM_DIR)
 	@mkdir -p $(OBJS_DIR)$(MTRX_UTILS_DIR)
 
 clean :
-	@make clean -C ./libft
-	@make clean -C ./minilibx
+	@make clean -C ./libft --no-print-directory
 	@$(RM) $(OBJS_DIR)
 	@echo "$(RED)All objects files been deleted!$(DEFAULT)"
 
 fclean : clean
-	@make fclean -C ./libft
-	@make clean -C ./minilibx
+	@make fclean -C ./libft --no-print-directory
 	@$(RM) $(NAME)
 	@echo "$(RED)$(NAME) removed!$(DEFAULT)"
 
 re: fclean all
 
 _libft :
-	@make -C ./libft
-
-_mlx :
-	@make -C ./minilibx
-
-lfclean : 
-	@make fclean -C ./libft
-	@$(RM) $(OBJS_DIR)
-	@$(RM) $(NAME)
-	@echo "$(RED)$(NAME) removed! (NOT THE MLX)$(DEFAULT)"
-
-rl: lfclean _libft $(OBJS_DIR) $(NAME)
+	@make -C ./libft --no-print-directory
 
 .PHONY:	all clean fclean re
