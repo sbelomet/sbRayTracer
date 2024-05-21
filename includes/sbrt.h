@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sbrt.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/19 13:51:56 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:35:30 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <limits.h>
 
 /* Libraries External */
-# include <mlx.h>
-//# include "../minilibx/mlx.h"
+//# include <mlx.h>
+# include "../minilibx/mlx.h"
 # include "../libft/includes/libft.h"
 
 /* Defines */
@@ -66,6 +66,7 @@ enum e_types
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	CONE,
 };
 
 enum e_materials
@@ -202,11 +203,22 @@ typedef struct s_cylin
 	double				diam;
 	double				radius;
 	double				height;
-	t_vector3			min;
-	t_vector3			max;
 	t_color				color;
 	struct s_material	*mat;
+	t_gtform			tm;
 }						t_cylin;
+
+typedef struct s_cone
+{
+	t_vector3			coord;
+	t_vector3			ori;
+	double				diam;
+	double				radius;
+	double				height;
+	t_color				color;
+	struct s_material	*mat;
+	t_gtform			tm;
+}						t_cone;
 
 /* Other structures */
 
@@ -281,6 +293,9 @@ typedef struct s_equation
 	double  t;
 	double	t1;
 	double	t2;
+	double	t3;
+	double	t4;
+	double	min_t;
 	t_vector3	oc;
 }	            t_equation;
 
@@ -372,11 +387,11 @@ int			ft_close_enough(const double f1, const double f2);
 
 /* Hittable Utils */
 void		ft_set_hit_func(t_objects *new_object, int type);
-int			ft_hit_anything(t_objects *list, const t_ray r, t_hit_rec *rec);
+int			ft_anything_hit(t_objects *list, const t_ray r, t_hit_rec *rec);
 int			ft_sphere_hit(const void *sphere_obj, const t_ray r, t_hit_rec *rec);
 int			ft_plane_hit(const void *plane_obj, const t_ray r, t_hit_rec *rec);
-int			ft_hit_cylinder(const void *cylinder_obj, const t_ray r,
-				const t_inter ray_t, t_hit_rec *rec);
+int			ft_cylinder_hit(const void *cylinder_obj, const t_ray r, t_hit_rec *rec);
+int			ft_cone_hit(const void *cone_obj, const t_ray r, t_hit_rec *rec);
 t_objects	*ft_object_new(void *object, int type);
 t_objects	*ft_object_last(t_objects *hittable);
 void		ft_object_add(t_objects **hittable, t_objects *new);

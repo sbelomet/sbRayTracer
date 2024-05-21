@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mat_funcs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 12:42:15 by scherty           #+#    #+#             */
-/*   Updated: 2024/05/19 14:01:35 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/21 10:21:02 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_color	ft_comp_diffuse_color(t_objects *list, t_hit_rec *rec, t_light *lights)
 	}
 	return (diffuse);
 }
-
+/* 
 t_color	ft_comp_spec_color(t_objects *list, t_hit_rec *rec, t_light *lights)
 {
 	t_color	spec;
@@ -31,3 +31,4 @@ t_color	ft_comp_spec_color(t_objects *list, t_hit_rec *rec, t_light *lights)
 	spec = ft_color_new(0, 0, 0, 0);
 	
 }
+ */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:08:51 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/19 13:52:21 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:36:06 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_render(t_base *base)
 		while (++index[0] < WIN_WIDTH)
 		{
 			ft_generate_ray(*base->camera, ((double)index[0] * fact_xy[0]) - 1.0, ((double)index[1] * fact_xy[1]) - 1.0, &r);
-			if (ft_hit_anything(base->first_object, r, &rec))
+			if (ft_anything_hit(base->first_object, r, &rec))
 			{
 				//if (ft_calc_lights(base->first_object, rec.object, &rec, base->first_light))
 				rec.color = rec.mat->ft_comp_color(base->first_object, &rec, base->first_light);

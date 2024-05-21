@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   base_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:47:15 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/19 13:23:43 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/21 14:24:29 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,31 @@ t_objects	*ft_objects_init(void)
 	t_objects	*list;
 	t_sphere	*s;
 	t_plane		*p;
-	
+	t_cylin		*c;
+	t_cone		*co;
+
 	list = NULL;
 	s = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_gtf_set_transform(&s->tm, ft_vec3_new(-1.5, 0, 0), ft_vec3_new(0, 0, 0), ft_vec3_new(.5, .5, .75));
-	s->color = ft_color_new(0, .25, .5, .78);
-	s->mat = ft_mat_new(ft_comp_diffuse_color);
-	ft_object_add(&list, ft_object_new(s, SPHERE));
-	s = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_gtf_set_transform(&s->tm, ft_vec3_new(0, 0, 0), ft_vec3_new(0, 0, 0), ft_vec3_new(.75, .5, .5));
+	ft_gtf_set_transform(&s->tm, ft_vec3_new(-1, 0, 0), ft_vec3_new(0, 0, 0), ft_vec3_new(.5, .5, .5));
 	s->color = ft_color_new(0, 1, .55, 0);
 	s->mat = ft_mat_new(ft_comp_diffuse_color);
 	ft_object_add(&list, ft_object_new(s, SPHERE));
-	s = (t_sphere *)malloc(sizeof(t_sphere));
-	ft_gtf_set_transform(&s->tm, ft_vec3_new(1, -.5, 0), ft_vec3_new(0, 0, 0), ft_vec3_new(.75, .75, .75));
-	s->color = ft_color_new(0, 1, .9, 0);
-	s->mat = ft_mat_new(ft_comp_diffuse_color);
-	ft_object_add(&list, ft_object_new(s, SPHERE));
+
+	c = (t_cylin *)malloc(sizeof(t_cylin));
+	ft_gtf_set_transform(&c->tm, ft_vec3_new(0, 0, 1), ft_vec3_new(0, 0, 0), ft_vec3_new(1, 1, 1));
+	c->color = ft_color_new(0, 0, 1, 1);
+	c->mat = ft_mat_new(ft_comp_diffuse_color);
+	ft_object_add(&list, ft_object_new(c, CYLINDER));
+
+	co = (t_cone *)malloc(sizeof(t_cone));
+	ft_gtf_set_transform(&co->tm, ft_vec3_new(1, 0, 0), ft_vec3_new(3, .3, 0), ft_vec3_new(.5, .5, 1));
+	co->color = ft_color_new(0, 1, .1, 0);
+	co->mat = ft_mat_new(ft_comp_diffuse_color);
+	ft_object_add(&list, ft_object_new(co, CONE));
+
 	p = (t_plane *)malloc(sizeof(t_plane));
-	ft_gtf_set_transform(&p->tm, ft_vec3_new(0, 0, .75), ft_vec3_new(0, 0, 0), ft_vec3_new(4, 4, 1));
-	p->color = ft_color_new(0, .75, .75, .75);
+	ft_gtf_set_transform(&p->tm, ft_vec3_new(0, 0, 1), ft_vec3_new(0, 0, 0), ft_vec3_new(99, 99, 4));
+	p->color = ft_color_new(0, 1, 1, 1);
 	p->mat = ft_mat_new(ft_comp_diffuse_color);
 	ft_object_add(&list, ft_object_new(p, PLANE));
 	return (list);

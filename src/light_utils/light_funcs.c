@@ -3,19 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   light_funcs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 15:15:10 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/19 13:54:24 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/21 11:09:34 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-int	ft_compute_shadow(t_objects *list, t_objects *current, t_hit_rec *rec, t_ray light_ray)
+/* Maybe change for mats */
+int	ft_compute_shadow(t_objects *list, t_objects *current,
+	t_hit_rec *rec, t_ray light_ray)
 {
 	t_objects	*tmp_obj;
 	int			shadow_good;
+	double		dist;
 
 	tmp_obj = list;
 	shadow_good = false;
@@ -25,8 +28,13 @@ int	ft_compute_shadow(t_objects *list, t_objects *current, t_hit_rec *rec, t_ray
 		{
 			if (tmp_obj->ft_hit(tmp_obj->object, light_ray, rec))
 			{
-				shadow_good = true;
-				break ;
+				dist = ft_vec3_len_squared(ft_vec3_sub(rec->p, light_ray.p1));
+				if (dist <= ft_vec3_len_squared(
+						ft_vec3_sub(light_ray.p2, light_ray.p1)))
+				{
+					shadow_good = true;
+					break ;
+				}
 			}
 		}
 		tmp_obj = tmp_obj->next;

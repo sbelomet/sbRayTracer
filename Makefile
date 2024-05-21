@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: scherty <scherty@student.42.fr>            +#+  +:+       +#+         #
+#    By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/14 10:06:00 by lgosselk          #+#    #+#              #
-#    Updated: 2024/05/19 13:25:55 by scherty          ###   ########.fr        #
+#    Updated: 2024/05/21 14:10:14 by sbelomet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,9 @@ GCC			=	gcc
 RM			=	rm -rf
 HEADER		=	-I includes
 LIBFT_PATH	=	./libft/libft.a
-GCCFLAGS	= 	-Wall -Wextra -Werror -Wno-unused-result
+MLX_PATH	=	./minilibx/libmlx.a
+GCCFLAGS	= 	-Wall -Wextra -Werror
+MLXFLAGS	=	-Lminilibx -lmlx -framework OpenGL -framework AppKit
 
 DEFAULT	=	\033[0m
 RED		=	\033[1;31m
@@ -58,7 +60,7 @@ F_MATH_UTILS	=	rng angles swap close_enough
 F_VEC3_UTILS	=	vector3 vector3_ops1 vector3_ops2 vector3_rand vector3_comp
 F_VEC4_UTILS	=	vector4 vector4_ops
 F_RAY_UTILS		=	ray
-F_OBJ_UTILS		=	intersections_funcs obj_list_utils
+F_OBJ_UTILS		=	intersections_funcs obj_list_utils plane_inter sphere_inter cylinder_inter cone_inter
 F_MATER_UITLS	=	material mat_funcs
 F_INTRV_UTILS	=	intervals intervals_ops
 F_LIGHT_UTILS	=	light_funcs light_list_utils
@@ -89,14 +91,14 @@ SRCS		=	src/main.c \
 OBJS		=	objs/main.o \
 				$(addprefix $(OBJS_DIR), $(addsuffix .o, $(FILES))) \
 
-all : _libft $(OBJS_DIR) $(NAME)
+all : _libft _mlx $(OBJS_DIR) $(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT_PATH) $(MLX_PATH)
-	@$(GCC) $(GCCFLAGS) $(OBJS) $(LIBFT_PATH) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
+	@$(GCC) $(GCCFLAGS) $(OBJS) $(LIBFT_PATH) $(MLX_PATH) $(MLXFLAGS) -o $(NAME) 
 	@echo "$(GREEN)$(NAME) created!$(DEFAULT)"
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
-	@$(GCC) $(GCCFLAGS) $(HEADER) -I/usr/include -Imlx_linux -O3 -o $@ -c $<
+	@$(GCC) $(GCCFLAGS) $(HEADER) -o $@ -c $<
 	@echo "$(YELLOW)$< added to the oven!$(DEFAULT)"
 
 $(OBJS_DIR):
@@ -121,18 +123,31 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)$(MTRX_UTILS_DIR)
 
 clean :
-	@make clean -C ./libft --no-print-directory
+	@make clean -C ./libft
+	@make clean -C ./minilibx
 	@$(RM) $(OBJS_DIR)
 	@echo "$(RED)All objects files been deleted!$(DEFAULT)"
 
 fclean : clean
-	@make fclean -C ./libft --no-print-directory
+	@make fclean -C ./libft
+	@make clean -C ./minilibx
 	@$(RM) $(NAME)
 	@echo "$(RED)$(NAME) removed!$(DEFAULT)"
 
 re: fclean all
 
 _libft :
-	@make -C ./libft --no-print-directory
+	@make -C ./libft
+
+_mlx :
+	@make -C ./minilibx
+
+lfclean : 
+	@make fclean -C ./libft
+	@$(RM) $(OBJS_DIR)
+	@$(RM) $(NAME)
+	@echo "$(RED)$(NAME) removed! (NOT THE MLX)$(DEFAULT)"
+
+rl: lfclean _libft $(OBJS_DIR) $(NAME)
 
 .PHONY:	all clean fclean re
