@@ -6,7 +6,7 @@
 #    By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/14 10:06:00 by lgosselk          #+#    #+#              #
-#    Updated: 2024/05/21 14:10:14 by sbelomet         ###   ########.fr        #
+#    Updated: 2024/05/22 12:56:43 by sbelomet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,9 @@ DRAW_DIR		=	draw/
 UTILS_DIR		=	utils/
 HOOKS_DIR		=	hooks/
 ERRORS_DIR		=	errors/
-#PARSING_DIR		=	parsing/
+PARSING_DIR		=	parsing/
 RAY_UTILS_DIR	=	ray_utils/
 MATH_UTILS_DIR	=	math_utils/
-#AABB_UTILS_DIR	=	aabb_utils/
 COLOR_UTILS_DIR	=	color_utils/
 VEC3_UTILS_DIR	=	vector3_utils/
 VEC4_UTILS_DIR	=	vector4_utils/
@@ -49,14 +48,13 @@ MTRX_UTILS_DIR	=	matrices_utils/
 
 # Files
 F_ERRORS		=	errors
-F_UTILS			=	cleaning
+F_UTILS			=	cleaning parsing_utils parsing_utils2
 F_INIT			=	base_init camera_utils
-#F_PARSING		=	file_parse creating_objs creating_uniques defaults
+F_PARSING		=	file_parse creating_objs creating_uniques defaults
 F_COLOR			=	color color_ops1
 F_DRAW			=	draw
 F_HOOKS			=	handle_hooks
 F_MATH_UTILS	=	rng angles swap close_enough
-#F_AABB_UTILS	=	aabb
 F_VEC3_UTILS	=	vector3 vector3_ops1 vector3_ops2 vector3_rand vector3_comp
 F_VEC4_UTILS	=	vector4 vector4_ops
 F_RAY_UTILS		=	ray
@@ -69,6 +67,7 @@ F_MTRX_UTILS	=	matrices matrices_ops matrices_inverse matrices_deter
 
 FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(ERRORS_DIR), $(F_ERRORS)) \
+				$(addprefix $(PARSING_DIR), $(F_PARSING)) \
 				$(addprefix $(UTILS_DIR), $(F_UTILS)) \
 				$(addprefix $(HOOKS_DIR), $(F_HOOKS)) \
 				$(addprefix $(DRAW_DIR), $(F_DRAW)) \
@@ -83,6 +82,7 @@ FILES		=	$(addprefix $(INIT_DIR), $(F_INIT)) \
 				$(addprefix $(LIGHT_UTILS_DIR), $(F_LIGHT_UTILS)) \
 				$(addprefix $(GTFM_DIR), $(F_GTFM)) \
 				$(addprefix $(MTRX_UTILS_DIR), $(F_MTRX_UTILS)) \
+
 
 SRCS		=	src/main.c \
 				$(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES))) \
@@ -107,11 +107,10 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)$(INIT_DIR)
 	@mkdir -p $(OBJS_DIR)$(HOOKS_DIR)
 	@mkdir -p $(OBJS_DIR)$(ERRORS_DIR)
-#	@mkdir -p $(OBJS_DIR)$(PARSING_DIR)
+	@mkdir -p $(OBJS_DIR)$(PARSING_DIR)
 	@mkdir -p $(OBJS_DIR)$(COLOR_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(DRAW_DIR)
 	@mkdir -p $(OBJS_DIR)$(MATH_UTILS_DIR)
-#	@mkdir -p $(OBJS_DIR)$(AABB_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(VEC3_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(VEC4_UTILS_DIR)
 	@mkdir -p $(OBJS_DIR)$(RAY_UTILS_DIR)

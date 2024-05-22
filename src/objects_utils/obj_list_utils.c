@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:24:54 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/21 14:08:15 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:40:14 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	ft_object_add(t_objects **hittable, t_objects *new)
 		return ;
 	}
 	last = ft_object_last(*hittable);
+	new->id = last->id;
 	last->next = new;
 }
 

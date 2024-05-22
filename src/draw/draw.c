@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:08:51 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/21 15:36:06 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:32:31 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,23 @@ void	ft_render(t_base *base)
 	t_ray		r;
 	t_hit_rec	rec;
 
+	rec.base = base;
 	fact_xy[0] = 1.0 / ((double)WIN_WIDTH / 2.0);
 	fact_xy[1] = 1.0 / ((double)WIN_HEIGHT / 2.0);
 	r = ft_ray_new(ft_vec3_new(0, 0, 0), ft_vec3_new(0, 0, 0));
 	index[1] = -1;
+	printf("camera: %f\n", base->camera->horz_size);
+	ft_vec3_print(base->camera->lookfrom, "cam pos");
+	ft_vec3_print(base->first_light->coord, "light coord");
 	while (++index[1] < WIN_HEIGHT)
 	{
 		index[0] = -1;
-		printf("Scanlines remaining: %d\n", WIN_HEIGHT - index[1]);
-		printf("\033[1A\033[2K");
+		printf("Scanlines remaining: %d\n\033[1A\033[2K", WIN_HEIGHT - index[1]);
 		while (++index[0] < WIN_WIDTH)
 		{
 			ft_generate_ray(*base->camera, ((double)index[0] * fact_xy[0]) - 1.0, ((double)index[1] * fact_xy[1]) - 1.0, &r);
 			if (ft_anything_hit(base->first_object, r, &rec))
 			{
-				//if (ft_calc_lights(base->first_object, rec.object, &rec, base->first_light))
 				rec.color = rec.mat->ft_comp_color(base->first_object, &rec, base->first_light);
 				ft_pixel_put(base, index[0], index[1], ft_get_color_int(rec.color));
 			}

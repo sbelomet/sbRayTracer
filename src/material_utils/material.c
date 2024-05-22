@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   material.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scherty <scherty@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:53:59 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/19 13:51:26 by scherty          ###   ########.fr       */
+/*   Updated: 2024/05/22 11:41:32 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ t_material	*ft_mat_new(t_color (*ft_comp_color)
 	t_material	*mat;
 
 	mat = (t_material *)malloc(sizeof(t_material));
+	if (!mat)
+		return (NULL);
 	mat->ft_comp_color = ft_comp_color;
 	mat->reflect = 0;
 	mat->shine = 0;

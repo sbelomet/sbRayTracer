@@ -6,13 +6,13 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 09:47:15 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/21 14:24:29 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:25:12 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sbrt.h"
 
-t_objects	*ft_objects_init(void)
+/* t_objects	*ft_objects_init(void)
 {
 	t_objects	*list;
 	t_sphere	*s;
@@ -34,8 +34,8 @@ t_objects	*ft_objects_init(void)
 	ft_object_add(&list, ft_object_new(c, CYLINDER));
 
 	co = (t_cone *)malloc(sizeof(t_cone));
-	ft_gtf_set_transform(&co->tm, ft_vec3_new(1, 0, 0), ft_vec3_new(3, .3, 0), ft_vec3_new(.5, .5, 1));
-	co->color = ft_color_new(0, 1, .1, 0);
+	ft_gtf_set_transform(&co->tm, ft_vec3_new(1, 0, 0), ft_vec3_new(M_PI_4, M_PI, 0), ft_vec3_new(.5, .5, 1));
+	co->color = ft_color_new(0, 1, 1, 1);
 	co->mat = ft_mat_new(ft_comp_diffuse_color);
 	ft_object_add(&list, ft_object_new(co, CONE));
 
@@ -58,10 +58,33 @@ t_light	*ft_lights_init(void)
 	return (list);
 }
 
-int	ft_base_init(t_base *base)
+t_alight	*ft_alight_init(void)
+{
+	t_alight	*new_alight;
+
+	new_alight = (t_alight *)malloc(sizeof(t_alight));
+	new_alight->color = ft_color_new(0, 1, 1, 1);
+	new_alight->ratio = .1;
+	return (new_alight);
+}
+ */
+void	set_base(t_base *base)
 {
 	base->alloc = NULL;
 	base->exit_code = 0;
+	base->mlx_ptr = NULL;
+	base->win_ptr = NULL;
+	base->first_object = NULL;
+	base->image.img_ptr = NULL;
+	base->image.img_data = NULL;
+	base->first_light = NULL;
+	base->camera = NULL;
+	base->alight = NULL;
+	base->seed = (unsigned long)&base;
+}
+
+int	ft_base_init(t_base *base)
+{
 	base->mlx_ptr = mlx_init();
 	if (!base->mlx_ptr)
 		return (print_error(MLX_ERR, NULL, 1), set_exit_code(base, 1, 1));
@@ -74,11 +97,11 @@ int	ft_base_init(t_base *base)
 	base->image.img_data = mlx_get_data_addr(base->image.img_ptr,
 			&base->image.bitsperpix, &base->image.size_line,
 			&base->image.endian);
-	base->seed = (unsigned long)&base;
-	base->camera = ft_cam_new();
+/* 	base->camera = ft_cam_new();
 	if (!base->camera)
 		return (print_error(CAM_ERR, NULL, 1), set_exit_code(base, 1, 1));
 	base->first_object = ft_objects_init();
 	base->first_light = ft_lights_init();
+	base->alight = ft_alight_init(); */
 	return (0);
 }

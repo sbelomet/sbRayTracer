@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/21 15:35:30 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/22 12:54:06 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define MLX_ERR "MLX initialisation failure"
 # define IMG_ERR "Image initialisation failure"
 # define CAM_ERR "Camera initialisation failure"
+# define MAT_ERR "Material initialisation failure"
 # define FILE_ERR "Cannot open file with path: "
 # define WIN_ERR "Window initialisation failure"
 
@@ -269,6 +270,7 @@ typedef struct s_base
 	void			*mlx_ptr;
 	void			*win_ptr;
 	t_camera		*camera;
+	t_alight		*alight;
 	int				exit_code;
 	unsigned long	seed;
 	t_objects		*first_object;
@@ -328,6 +330,7 @@ int			close_window(t_base *base);
 /* ---------------- */
 
 /* Init */
+void		set_base(t_base *base);
 int			ft_base_init(t_base *base);
 t_camera	*ft_cam_new(void);
 void		ft_update_cam(t_camera *cam);
@@ -367,6 +370,7 @@ t_color		ft_color_new(const double a, const double r,
 				const double g, const double b);
 int			ft_get_color_int(t_color color);
 t_color		ft_color_byte_to_per(const t_color color);
+void		ft_color_print(const t_color c, const char *name);
 t_color		ft_color_add(t_color c1, const t_color c2);
 t_color		ft_color_sub(t_color c1, const t_color c2);
 t_color		ft_color_mult(t_color c, const double value);

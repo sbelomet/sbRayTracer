@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:06:19 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/21 13:31:08 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:59:57 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ t_camera	*ft_cam_new(void)
 	cam = (t_camera *)malloc(sizeof(t_camera));
 	if (!cam)
 		return (NULL);
-	cam->lookfrom = ft_vec3_new(0, -10, -2);
+	cam->lookfrom = ft_vec3_new(0, -10, -1);
 	cam->lookat = ft_vec3_new(0, 0, 0);
 	cam->vup = ft_vec3_new(0, 0, 1);
-	cam->length = 1;
+	cam->length = 2;
 	cam->horz_size = .25;
 	cam->aspect = 16.0 / 9.0;
 	ft_update_cam(cam);
