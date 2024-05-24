@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:20:25 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/22 13:22:42 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/24 10:28:25 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ static int	check_create_unique(t_base *base, char **args, int type)
 		base->camera = create_camera(args);
 		if (!base->camera)
 			return (print_error("Error\n", CREATE_ERR, 1));
-		printf("added camera\n");
 		return (0);
 	}
 	if (type == LIGHT)
@@ -92,7 +91,6 @@ static int	line_parse(t_base *base, char *line)
 	}
 	else if (!add_token(base, type, args + 1))
 		return (1);
-	printf("line parsing like crazy\n");
 	return (0);
 }
 
@@ -101,7 +99,6 @@ int	file_parse(t_base *base, char *filepath)
 	char	*line;
 	int		infile;
 
-	printf("were parrsing\n");
 	infile = open(filepath, O_RDONLY);
 	if (infile < 0)
 		return (perror(filepath), set_exit_code(base, 1, 1));

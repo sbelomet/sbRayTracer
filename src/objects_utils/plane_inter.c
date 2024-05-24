@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 13:34:04 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/22 13:36:03 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/24 10:30:11 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	ft_plane_hit(const void *plane_obj, const t_ray r, t_hit_rec *rec)
 	double		uv[2];
 
 	pl = (t_plane *)plane_obj;
-	ft_vec3_print(pl->coord, "plane pos");
 	bck_r = ft_gtf_apply_ray(pl->tm, r, BCKFORM);
 	k = ft_vec3_unit(bck_r.lab);
 	if (!ft_close_enough(k.z, 0))

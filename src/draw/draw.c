@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:08:51 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/22 13:32:31 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/24 12:36:13 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ void	ft_render(t_base *base)
 	fact_xy[1] = 1.0 / ((double)WIN_HEIGHT / 2.0);
 	r = ft_ray_new(ft_vec3_new(0, 0, 0), ft_vec3_new(0, 0, 0));
 	index[1] = -1;
-	printf("camera: %f\n", base->camera->horz_size);
-	ft_vec3_print(base->camera->lookfrom, "cam pos");
-	ft_vec3_print(base->first_light->coord, "light coord");
 	while (++index[1] < WIN_HEIGHT)
 	{
 		index[0] = -1;
