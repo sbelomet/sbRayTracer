@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 10:07:34 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/22 12:54:06 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:44:23 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,6 +349,7 @@ int			file_parse(t_base *base, char *filepath);
 t_plane		*create_plane(char **args);
 t_sphere	*create_sphere(char **args);
 t_cylin		*create_cylinder(char **args);
+t_cone		*create_cone(char **args);
 
 /* Creating uniques */
 t_light		*create_light(char **args);

@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 10:34:31 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/22 12:55:45 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:49:10 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	extract_type(char *arg)
 			return (SPHERE);
 		if (ft_equal_strs("cy", arg))
 			return (CYLINDER);
+		if (ft_equal_strs("co", arg))
+			return (CONE);
 	}
 	return (-1);
 }
@@ -79,7 +81,7 @@ bool	right_args(char **args, int type)
 	if ((type == CAMERA || type == LIGHT || type == PLANE || type == SPHERE)
 		&& i != 4)
 		return (false);
-	if (type == CYLINDER && i != 6)
+	if ((type == CYLINDER || type == CONE) && i != 6)
 		return (false);
 	return (true);
 }

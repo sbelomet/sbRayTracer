@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:20:25 by lgosselk          #+#    #+#             */
-/*   Updated: 2024/05/24 10:28:25 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:44:05 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	*create_object(char **args, int id)
 		return (create_plane(args));
 	if (id == CYLINDER)
 		return (create_cylinder(args));
+	if (id == CONE)
+		return (create_cone(args));
 	return (NULL);
 }
 

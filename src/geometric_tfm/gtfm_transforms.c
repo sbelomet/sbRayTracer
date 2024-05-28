@@ -6,7 +6,7 @@
 /*   By: sbelomet <sbelomet@42lausanne.ch>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 14:35:25 by sbelomet          #+#    #+#             */
-/*   Updated: 2024/05/21 10:20:36 by sbelomet         ###   ########.fr       */
+/*   Updated: 2024/05/28 11:30:10 by sbelomet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	ft_gtf_set_transform(t_gtform *gt, const t_vector3 trans,
 						scale_mtrx))));
 	gt->bcktfm = ft_mtrx_inverse(gt->fwdtfm);
 }
+
 
 t_vector3	ft_gtf_apply_vec3(const t_gtform gt, const t_vector3 v,
 	const int dir_flag)
